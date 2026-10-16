@@ -1,5 +1,12 @@
 import { create } from 'zustand';
 import type { LineageId } from '@/lib/types';
+import type { LineageRank } from '@/lib/ensembl';
+
+export interface TraceOrigin {
+  id: string;
+  label: string;
+  commonName: string;
+}
 
 export interface PhyloState {
   selectedId: string | null;
@@ -11,6 +18,13 @@ export interface PhyloState {
   reverse: boolean;
   coldOpenDone: boolean;
 
+  traceOrigin: TraceOrigin | null;
+  traceRanks: LineageRank[] | null;
+  traceLoading: boolean;
+  traceError: string | null;
+  tourStep: number;
+  tourDone: boolean;
+
   select: (id: string | null) => void;
   setLineage: (lineage: LineageId | null) => void;
   addMashupPick: (id: string) => void;
@@ -19,6 +33,14 @@ export interface PhyloState {
   discover: (id: string) => void;
   toggleReverse: () => void;
   finishColdOpen: () => void;
+  startTrace: (org: TraceOrigin) => void;
+  setTraceData: (ranks: LineageRank[]) => void;
+  setTraceError: (msg: string) => void;
+  clearTrace: () => void;
+  nextTourStep: (max: number) => void;
+  prevTourStep: () => void;
+  finishTour: () => void;
+  reopenTour: () => void;
 }
 
 export function initialPhyloState() {
@@ -31,6 +53,13 @@ export function initialPhyloState() {
     discovered: new Set<string>(),
     reverse: false,
     coldOpenDone: false,
+
+    traceOrigin: null as TraceOrigin | null,
+    traceRanks: null as LineageRank[] | null,
+    traceLoading: false,
+    traceError: null as string | null,
+    tourStep: 0,
+    tourDone: false,
   };
 }
 
@@ -82,4 +111,36 @@ export const usePhyloStore = create<PhyloState>((set) => ({
   toggleReverse: () => set((state) => ({ reverse: !state.reverse })),
 
   finishColdOpen: () => set({ coldOpenDone: true }),
+
+  startTrace: (org) =>
+    set({
+      traceOrigin: org,
+      traceRanks: null,
+      traceLoading: true,
+      traceError: null,
+    }),
+
+  setTraceData: (ranks) =>
+    set({ traceRanks: ranks, traceLoading: false, traceError: null }),
+
+  setTraceError: (msg) =>
+    set({ traceError: msg, traceLoading: false, traceRanks: null }),
+
+  clearTrace: () =>
+    set({
+      traceOrigin: null,
+      traceRanks: null,
+      traceLoading: false,
+      traceError: null,
+    }),
+
+  nextTourStep: (max) =>
+    set((state) => ({ tourStep: Math.min(state.tourStep + 1, max) })),
+
+  prevTourStep: () =>
+    set((state) => ({ tourStep: Math.max(state.tourStep - 1, 0) })),
+
+  finishTour: () => set({ tourDone: true, tourStep: 0 }),
+
+  reopenTour: () => set({ tourDone: false, tourStep: 0 }),
 }));
