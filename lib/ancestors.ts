@@ -54,3 +54,8 @@ export function ancestorVerdict(a: string, b: string): string | null {
   if (known) return known.verdict;
   return `${displayName(a)} and ${displayName(b)} meet back at ${displayName(ancestor)} — that is their last shared ancestor.`;
 }
+
+export function curatedSplit(a: string, b: string): number | null {
+  const known = MASHUP_PAIRS[mashupKey(a, b)];
+  return known?.splitMya ?? null;
+}

@@ -5,7 +5,18 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Dna, X } from 'lucide-react';
 import { usePhyloStore } from '@/store/usePhyloStore';
 import { MASHUP_ORGANISMS } from '@/lib/data/mashup';
-import { ancestorVerdict, commonAncestor, displayName } from '@/lib/ancestors';
+import {
+  ancestorVerdict,
+  commonAncestor,
+  curatedSplit,
+  displayName,
+} from '@/lib/ancestors';
+
+function splitLabel(mya: number): string {
+  return mya >= 1000
+    ? `Split ~${(mya / 1000).toFixed(1).replace(/\.0$/, '')} billion years ago`
+    : `Split ~${mya} million years ago`;
+}
 
 const EXTRA_PICKS = [
   { id: 'blue-whale', emoji: '🐋', label: 'Blue Whale' },
@@ -23,6 +34,7 @@ export function MashupCalculator() {
 
   const verdict = pair ? ancestorVerdict(pair[0], pair[1]) : null;
   const ancestor = pair ? commonAncestor(pair[0], pair[1]) : null;
+  const split = pair ? curatedSplit(pair[0], pair[1]) : null;
 
   return (
     <>
@@ -76,8 +88,15 @@ export function MashupCalculator() {
               {pair ? (
                 <>
                   <span>
-                    🧬 {displayName(pair[0])} × {displayName(pair[1])} meet at{' '}
-                    <strong>{ancestor ? displayName(ancestor) : '—'}</strong>
+                    🧬 {displayName(pair[0])} × {displayName(pair[1])}{' '}
+                    {split !== null ? (
+                      <strong>{splitLabel(split)}</strong>
+                    ) : (
+                      <>
+                        meet at{' '}
+                        <strong>{ancestor ? displayName(ancestor) : '—'}</strong>
+                      </>
+                    )}
                   </span>
                   <button type="button" className="phylo-mashup-reset" onClick={clearMashup}>
                     Reset

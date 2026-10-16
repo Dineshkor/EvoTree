@@ -3,8 +3,9 @@
 import { motion } from 'framer-motion';
 import { useViewport } from '@xyflow/react';
 import { usePhyloStore } from '@/store/usePhyloStore';
-import { commonAncestor } from '@/lib/ancestors';
+import { commonAncestor, curatedSplit } from '@/lib/ancestors';
 import { MASHUP_ORGANISMS } from '@/lib/data/mashup';
+import { TRUNK_X, timeToY } from '@/lib/layout';
 
 function resolvePosition(
   id: string,
@@ -38,7 +39,12 @@ export function MashupBeams({
 
   const a = toScreen(pair[0]);
   const b = toScreen(pair[1]);
-  const target = toScreen(ancestor);
+
+  const split = curatedSplit(pair[0], pair[1]);
+  const trunkPoint = split !== null ? { x: TRUNK_X, y: timeToY(split) } : null;
+  const target = trunkPoint
+    ? { x: trunkPoint.x * zoom + vx, y: trunkPoint.y * zoom + vy }
+    : toScreen(ancestor);
   if (!a || !b || !target) return null;
 
   const path = (from: { x: number; y: number }) => {

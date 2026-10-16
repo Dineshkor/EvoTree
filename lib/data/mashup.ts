@@ -11,14 +11,16 @@ export const MASHUP_ORGANISMS: MashupOrganism[] = [
   { id: 'mushroom', emoji: '🍄', label: 'Mushroom', parent: 'eukaryotes' },
 ];
 
-export const MASHUP_PAIRS: Record<string, { verdict: string }> = {
+export const MASHUP_PAIRS: Record<string, { verdict: string; splitMya?: number }> = {
   'human|mushroom': {
     verdict:
       'You and a mushroom split 1.5 billion years ago — fungi are closer to you than to plants!',
+    splitMya: 1500,
   },
   'blue-whale|land-wolf': {
     verdict:
       'A wolf and a whale are both mammals — they share a furry four-legged ancestor that survived the asteroid that killed the dinosaurs.',
+    splitMya: 85,
   },
 };
 

@@ -4,6 +4,7 @@ import {
   lineagePath,
   commonAncestor,
   ancestorVerdict,
+  curatedSplit,
 } from '../lib/ancestors';
 
 describe('ancestors', () => {
@@ -34,5 +35,11 @@ describe('ancestors', () => {
     expect(ancestorVerdict('human', 'mushroom')).toContain('1.5 billion');
     expect(ancestorVerdict('cyanobacteria', 'blue-whale')).toBeTruthy();
     expect(ancestorVerdict('luca', 'nope')).toBeNull();
+  });
+
+  it('reports the curated split time for known pairs and null otherwise', () => {
+    expect(curatedSplit('human', 'mushroom')).toBe(1500);
+    expect(curatedSplit('mushroom', 'human')).toBe(1500);
+    expect(curatedSplit('cyanobacteria', 'blue-whale')).toBeNull();
   });
 });

@@ -622,6 +622,10 @@ body {
   border-radius: 9999px;
   background: rgba(200, 220, 255, 0.25);
   margin: 2px auto 10px;
+  padding: 6px 0;
+  box-sizing: content-box;
+  touch-action: none;
+  cursor: grab;
 }
 .phylo-drawer-close {
   position: absolute;

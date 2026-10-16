@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useDragControls } from 'framer-motion';
 import { X } from 'lucide-react';
 import { getSpecies } from '@/lib/data/species';
 import { WHALE_MORPH, morphAt } from '@/lib/morph';
@@ -25,6 +25,7 @@ export function CreatureDrawer() {
 
   const species = selectedId ? getSpecies(selectedId) : undefined;
   const isWhale = species ? WHALE_MORPH.stageIds.includes(species.id) : false;
+  const dragControls = useDragControls();
 
   const morph = isWhale && species ? morphAt(WHALE_MORPH, morphProgress) : null;
   const preview = morph ? getSpecies(morph.nearId) ?? species : species;
@@ -46,13 +47,18 @@ export function CreatureDrawer() {
           exit={{ y: '100%' }}
           transition={{ type: 'spring', stiffness: 260, damping: 30 }}
           drag="y"
+          dragListener={false}
+          dragControls={dragControls}
           dragConstraints={{ top: 0, bottom: 0 }}
           dragElastic={0.2}
           onDragEnd={(_, info) => {
             if (info.offset.y > 120) select(null);
           }}
         >
-          <div className="phylo-drawer-grab" />
+          <div
+            className="phylo-drawer-grab"
+            onPointerDown={(e) => dragControls.start(e)}
+          />
 
           <button
             type="button"
