@@ -4,6 +4,7 @@ import { DynamicCanvas } from './DynamicCanvas';
 import { ColdOpen } from './ui/ColdOpen';
 import { TopBar } from './ui/TopBar';
 import { MashupCalculator } from './ui/MashupCalculator';
+import { CreatureDrawer } from './ui/CreatureDrawer';
 
 export function PhyloApp() {
   return (
@@ -11,6 +12,7 @@ export function PhyloApp() {
       <DynamicCanvas />
       <TopBar />
       <MashupCalculator />
+      <CreatureDrawer />
       <ColdOpen />
     </div>
   );

@@ -79,7 +79,8 @@ function FocusController({
     if (!selectedId) return;
     const p = positions[selectedId];
     if (!p) return;
-    setCenter(p.x, p.y, { zoom: 1, duration: 700 });
+    const lift = typeof window !== 'undefined' ? window.innerHeight * 0.16 : 120;
+    setCenter(p.x, p.y + lift, { zoom: 1, duration: 700 });
   }, [selectedId, positions, setCenter]);
   return null;
 }
