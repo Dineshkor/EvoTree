@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #03050b;
+  --foreground: #e6ecff;
 }
 
 @theme inline {
@@ -12,15 +12,216 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* ---------- rarity ---------- */
+[data-rarity="common"] {
+  --rarity: #8b9bb4;
+}
+[data-rarity="rare"] {
+  --rarity: #4aa3ff;
+}
+[data-rarity="epic"] {
+  --rarity: #b06bff;
+}
+[data-rarity="legendary"] {
+  --rarity: #ffb020;
+}
+[data-rarity="mythic"] {
+  --rarity: #ff4d6d;
+}
+
+/* ---------- creature node ---------- */
+.phylo-node {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 168px;
+  transition: opacity 220ms ease, filter 220ms ease, transform 220ms ease;
+}
+.phylo-node[data-state="dim"] {
+  opacity: 0.22;
+  filter: saturate(0.2) blur(0.4px);
+}
+.phylo-node[data-state="active"] {
+  transform: scale(1.06);
+}
+.phylo-node[data-state="pulse"] .phylo-medallion {
+  animation: phylo-pulse 2.4s ease-in-out infinite;
+}
+.phylo-medallion {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  border-radius: 9999px;
+  padding: 3px;
+  background: conic-gradient(
+    from 210deg,
+    var(--rarity),
+    rgba(255, 255, 255, 0.15),
+    var(--rarity)
+  );
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--rarity) 55%, transparent),
+    0 0 22px color-mix(in oklab, var(--rarity) 45%, transparent),
+    inset 0 0 18px rgba(0, 0, 0, 0.6);
+}
+.phylo-node[data-state="active"] .phylo-medallion {
+  box-shadow: 0 0 0 2px var(--rarity),
+    0 0 42px color-mix(in oklab, var(--rarity) 70%, transparent),
+    inset 0 0 18px rgba(0, 0, 0, 0.6);
+}
+.phylo-orb {
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 255, 255, 0.12),
+    rgba(3, 6, 14, 0.92) 70%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.phylo-sprite {
+  width: 58px;
+  height: 58px;
+  color: color-mix(in oklab, var(--rarity) 75%, white);
+  filter: drop-shadow(0 0 6px color-mix(in oklab, var(--rarity) 60%, transparent));
+}
+.phylo-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-align: center;
+  padding: 3px 9px;
+  border-radius: 7px;
+  background: rgba(6, 10, 20, 0.82);
+  border: 1px solid color-mix(in oklab, var(--rarity) 40%, transparent);
+  color: #f2f6ff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+}
+.phylo-pill {
+  font-size: 9.5px;
+  max-width: 168px;
+  text-align: center;
+  color: rgba(215, 228, 255, 0.7);
+  background: rgba(6, 10, 20, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+.phylo-handle {
+  width: 1px;
+  height: 1px;
+  min-width: 1px;
+  min-height: 1px;
+  background: transparent;
+  border: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- fossil ---------- */
+.phylo-orb-fossil {
+  font-size: 34px;
+  filter: grayscale(0.2) drop-shadow(0 0 8px rgba(255, 90, 60, 0.55));
+}
+.phylo-fossil .phylo-medallion,
+.phylo-fossil .phylo-badge {
+  --rarity: #7a8a86;
+}
+.phylo-badge-fossil {
+  color: #ffd9cf;
+}
+
+/* ---------- extinction barrier ---------- */
+.phylo-barrier {
+  position: relative;
+  width: 2600px;
+  height: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.phylo-barrier-line {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #ff3b2f 12%,
+    #ffb347 50%,
+    #ff3b2f 88%,
+    transparent
+  );
+  box-shadow: 0 0 34px rgba(255, 60, 40, 0.85),
+    0 0 90px rgba(255, 120, 40, 0.5);
+}
+.phylo-barrier-label {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 6px 16px;
+  border-radius: 10px;
+  background: rgba(28, 4, 4, 0.86);
+  border: 1px solid rgba(255, 80, 60, 0.55);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+}
+.phylo-barrier-mya {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #ffb347;
+}
+.phylo-barrier-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffe3d6;
+}
+.phylo-barrier-sub {
+  font-size: 10px;
+  color: rgba(255, 220, 210, 0.72);
+}
+
+/* ---------- edges ---------- */
+.phylo-edge-laser {
+  stroke: #8ee7ff;
+  stroke-width: 3;
+  stroke-dasharray: 10 12;
+  filter: drop-shadow(0 0 6px #4ad9ff) drop-shadow(0 0 14px #2aa8ff);
+  animation: phylo-arc 1s linear infinite;
+}
+
+@keyframes phylo-arc {
+  to {
+    stroke-dashoffset: -22;
+  }
+}
+@keyframes phylo-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 2px var(--rarity),
+      0 0 20px color-mix(in oklab, var(--rarity) 45%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 3px var(--rarity),
+      0 0 46px color-mix(in oklab, var(--rarity) 80%, transparent);
+  }
 }
