@@ -31,6 +31,7 @@ import { FossilNode } from './FossilNode';
 import { ExtinctionBarrier } from './ExtinctionBarrier';
 import { LineageEdge } from './LineageEdge';
 import { EraBackdrop } from '@/components/ui/EraBackdrop';
+import { MashupBeams } from './MashupBeams';
 
 const nodeTypes: NodeTypes = {
   creature: CreatureNode,
@@ -231,6 +232,7 @@ function CanvasInner() {
         <FocusController positions={positions} selectedId={selectedId} />
         <LineageStoryController positions={positions} />
       </ReactFlow>
+      <MashupBeams positions={positions} />
     </div>
   );
 }
