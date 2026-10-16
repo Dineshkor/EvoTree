@@ -1005,3 +1005,228 @@ body {
   color: rgba(140, 220, 200, 0.6);
   white-space: nowrap;
 }
+
+/* ---------- organism search ---------- */
+.phylo-spin {
+  animation: phylo-spin 0.9s linear infinite;
+}
+.phylo-search-hud {
+  position: absolute;
+  right: 12px;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  z-index: 30;
+}
+.phylo-search-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 15px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #eaf3ff;
+  background: rgba(8, 14, 26, 0.8);
+  border: 1px solid rgba(150, 190, 255, 0.25);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+.phylo-search-btn[data-active="true"] {
+  background: linear-gradient(180deg, #9dfcd0, #38d39a);
+  color: #04140f;
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 26px rgba(50, 220, 160, 0.5);
+}
+.phylo-search-panel {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 56px);
+  z-index: 32;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(6, 10, 22, 0.94);
+  border: 1px solid rgba(140, 220, 200, 0.28);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+}
+.phylo-search-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 11px;
+  font-size: 14px;
+  color: #eaf3ff;
+  background: rgba(12, 20, 34, 0.9);
+  border: 1px solid rgba(140, 200, 240, 0.22);
+  outline: none;
+}
+.phylo-search-input:focus {
+  border-color: rgba(120, 240, 200, 0.6);
+}
+.phylo-search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+  max-height: 34dvh;
+  overflow-y: auto;
+}
+.phylo-search-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 11px;
+  border-radius: 10px;
+  text-align: left;
+  background: rgba(16, 24, 44, 0.6);
+  border: 1px solid rgba(140, 180, 255, 0.12);
+  cursor: pointer;
+}
+.phylo-search-item:hover {
+  border-color: rgba(120, 240, 200, 0.5);
+}
+.phylo-search-item-common {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #eaf3ff;
+  text-transform: capitalize;
+}
+.phylo-search-item-name {
+  font-size: 11px;
+  font-style: italic;
+  color: rgba(180, 205, 240, 0.55);
+}
+.phylo-search-empty {
+  margin: 8px 2px;
+  font-size: 12px;
+  color: rgba(200, 220, 255, 0.6);
+}
+
+/* ---------- trace panel ---------- */
+.phylo-tracepanel {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 56px);
+  z-index: 31;
+  max-width: 480px;
+  margin: 0 auto;
+  max-height: 44dvh;
+  overflow-y: auto;
+  padding: 14px;
+  border-radius: 18px;
+  background: linear-gradient(
+    180deg,
+    rgba(6, 26, 22, 0.94),
+    rgba(4, 10, 14, 0.96)
+  );
+  border: 1px solid rgba(120, 240, 200, 0.35);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+}
+.phylo-tracepanel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.phylo-tracepanel-kicker {
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(140, 240, 210, 0.7);
+}
+.phylo-tracepanel-head h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: #eafff8;
+  text-transform: capitalize;
+}
+.phylo-tracepanel-sub {
+  font-size: 11px;
+  font-style: italic;
+  color: rgba(180, 220, 210, 0.5);
+}
+.phylo-tracepanel-head button {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9999px;
+  color: #cfeaff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+}
+.phylo-tracepanel-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: rgba(200, 240, 230, 0.8);
+}
+.phylo-tracepanel-exterror {
+  margin-top: 12px;
+}
+.phylo-tracepanel-exterror p {
+  font-size: 12.5px;
+  color: #ffd9cf;
+}
+.phylo-tracepanel-exterror button {
+  margin-top: 8px;
+  padding: 7px 14px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #04140f;
+  background: linear-gradient(180deg, #9dfcd0, #38d39a);
+  border: none;
+  cursor: pointer;
+}
+.phylo-tracepanel-span {
+  margin: 8px 0 10px;
+  font-size: 12px;
+  color: rgba(200, 240, 230, 0.75);
+}
+.phylo-tracepanel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  list-style: none;
+}
+.phylo-tracepanel-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.phylo-tracepanel-list li[data-anchored="true"] {
+  border-color: rgba(255, 200, 120, 0.4);
+  background: rgba(255, 190, 100, 0.06);
+}
+.phylo-tracepanel-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #eaf6ff;
+  text-transform: capitalize;
+}
+.phylo-tracepanel-mya {
+  font-size: 12px;
+  font-weight: 700;
+  color: #7dfcd0;
+  white-space: nowrap;
+}
+.phylo-tracepanel-mya em {
+  font-size: 8.5px;
+  font-style: normal;
+  color: rgba(160, 240, 210, 0.6);
+  margin-left: 2px;
+}

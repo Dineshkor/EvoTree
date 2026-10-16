@@ -2,7 +2,8 @@ import type { NextRequest } from 'next/server';
 import { fetchLineage } from '@/lib/ensembl';
 
 export async function GET(req: NextRequest) {
-  const name = req.nextUrl.searchParams.get('name');
+  const params = req.nextUrl.searchParams;
+  const name = params.get('name') ?? params.get('taxon');
   if (!name) {
     return Response.json({ error: 'missing-name' }, { status: 400 });
   }
