@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PHYLO · The Game of Life
 
-## Getting Started
+An interactive, mobile-first map of **4 billion years of evolution**, built as a gamified
+RPG "tech tree" for everyday people — not scientists. Every organism leads with a punchy
+plain-English nickname (e.g. *"The Wolf-Sized Land Whale"*); the Latin name is tucked away
+as tiny muted subtext.
 
-First, run the development server:
+Built with Next.js (App Router) + TypeScript, Tailwind CSS, [`@xyflow/react`](https://reactflow.dev),
+`zustand`, `framer-motion`, and `lucide-react`.
+
+## Features
+
+- **Circular creature medallions** — custom React Flow nodes with animated inline-SVG
+  sprites, rarity-colored glow rings, nickname badges, and "Unlocked Upgrade" pills.
+- **Living era backdrop** — the atmosphere transitions through Earth's eras as you scroll
+  the timeline, with an era-specific particle field (ember, bioluminescent mote, mist, ash,
+  bubble).
+- **Extinction fault lines** — glowing red barriers at *252 MYA (The Great Dying)* and
+  *66 MYA (The Asteroid)*, with extinct branches terminating in fossil nodes.
+- **"How are we related?" lineage pills** — tap Whales / Chickens→T-Rex / Crabs / Humans to
+  trace the full path with animated laser edges and a guided camera fly-through.
+- **Mashup calculator** — pick any two organisms and watch two beams collide at their exact
+  common ancestor, then read a punchy verdict.
+- **RPG character sheet** — a glassmorphic bottom drawer with a "standing next to a human"
+  scale graphic and three build badges (➕ Added Upgrade, ➖ Lost Trait, ⚡ The Plot Twist).
+- **Morph slider** — scrub the whale lineage from *Pakicetus* (four-legged wolf) to the
+  *Blue Whale* and watch traits and scale evolve live.
+- **Progress meter** with confetti as you discover all 13 organisms.
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). Best viewed on a phone-sized viewport
+(use your browser devtools' mobile emulation).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build |
+| `npm run start` | Serve the production build |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm run test` | Run the Vitest unit suite (pure `lib/` logic) |
 
-## Learn More
+## Architecture
 
-To learn more about Next.js, take a look at the following resources:
+Pure, unit-tested logic lives in `lib/`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `lib/data/*` — the seed dataset (`species.ts`), era palettes, lineage pills, mashup guests.
+- `lib/layout.ts` — log-compressed timeline positioning (`timeToY` / `yToTime`).
+- `lib/era.ts` — age → era palette mapping.
+- `lib/ancestors.ts` — parent-chain walking + common-ancestor finder.
+- `lib/morph.ts` — morph-chain interpolation.
+- `lib/selectors.ts` — derived highlight/dim/neighbor sets.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The UI is a thin layer over a single `zustand` store (`store/usePhyloStore.ts`). The React
+Flow canvas (`components/canvas/PhyloCanvas.tsx`) is client-only, loaded via
+`next/dynamic` with `ssr: false`.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Design and implementation docs live under `docs/superpowers/`.

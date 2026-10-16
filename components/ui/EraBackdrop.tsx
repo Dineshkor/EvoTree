@@ -41,8 +41,14 @@ function ParticleField({ kind, accent }: { kind: ParticleKind; accent: string })
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const kindRef = useRef(kind);
   const accentRef = useRef(accent);
-  kindRef.current = kind;
-  accentRef.current = accent;
+
+  useEffect(() => {
+    kindRef.current = kind;
+  }, [kind]);
+
+  useEffect(() => {
+    accentRef.current = accent;
+  }, [accent]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

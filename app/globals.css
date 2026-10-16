@@ -811,3 +811,102 @@ body {
 .phylo-morph-tick {
   max-width: 22%;
 }
+
+/* ---------- progress meter ---------- */
+.phylo-progress {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  right: 12px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  pointer-events: none;
+}
+.phylo-progress-ring {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  border-radius: 9999px;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(
+    #54f2ff calc(var(--pct, 0) * 1%),
+    rgba(120, 160, 220, 0.16) 0
+  );
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.5);
+}
+.phylo-progress-ring::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 9999px;
+  background: rgba(5, 9, 18, 0.92);
+}
+.phylo-progress-count,
+.phylo-progress-total {
+  position: relative;
+  z-index: 1;
+  font-weight: 800;
+  color: #eaf3ff;
+}
+.phylo-progress-count {
+  font-size: 16px;
+  margin-left: 8px;
+}
+.phylo-progress-total {
+  position: absolute;
+  font-size: 9px;
+  color: rgba(190, 210, 245, 0.6);
+  margin-top: 16px;
+  margin-left: 18px;
+}
+.phylo-progress-label {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(170, 200, 240, 0.6);
+}
+.phylo-spark {
+  position: absolute;
+  top: 26px;
+  left: 26px;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+/* ---------- grain / scanlines ---------- */
+.phylo-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  pointer-events: none;
+  opacity: 0.5;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.025) 0px,
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+  animation: phylo-flicker 5s steps(40) infinite;
+}
+@keyframes phylo-flicker {
+  0%,
+  100% {
+    opacity: 0.42;
+  }
+  47% {
+    opacity: 0.5;
+  }
+  48% {
+    opacity: 0.33;
+  }
+  49% {
+    opacity: 0.52;
+  }
+}
