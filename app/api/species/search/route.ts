@@ -1,8 +1,14 @@
 import type { NextRequest } from 'next/server';
-import { fetchSpecies } from '@/lib/ensembl';
+import { searchCached } from '@/lib/ensemblCache';
 
 export async function GET(req: NextRequest) {
   const q = req.nextUrl.searchParams.get('q') ?? '';
-  const results = await fetchSpecies(q);
-  return Response.json(results);
+  try {
+    const results = await searchCached(q);
+    return Response.json(results);
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : 'upstream';
+    const status = msg === 'busy' ? 429 : 502;
+    return Response.json({ error: msg }, { status });
+  }
 }

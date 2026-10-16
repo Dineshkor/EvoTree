@@ -136,10 +136,11 @@ export interface SpeciesSuggestion {
   displayName: string;
 }
 
-type FetchInit = RequestInit & { next?: { revalidate: number } };
-const CACHE_INIT: FetchInit = { next: { revalidate: 86400 } };
-
 const ENSEMBL = 'https://rest.ensembl.org';
+
+export function lineageErrorStatus(msg: string): number {
+  return msg === 'not-found' ? 404 : msg === 'busy' ? 429 : 502;
+}
 
 export async function fetchLineage(
   name: string,
@@ -148,7 +149,7 @@ export async function fetchLineage(
   const url = `${ENSEMBL}/taxonomy/classification/${encodeURIComponent(
     name,
   )}?content-type=application/json`;
-  const res = await fetchImpl(url, CACHE_INIT);
+  const res = await fetchImpl(url);
   if (res.status === 404) throw new Error('not-found');
   if (res.status === 429) throw new Error('busy');
   if (!res.ok) throw new Error('upstream');
@@ -166,8 +167,10 @@ export async function fetchSpecies(
   const url = `${ENSEMBL}/taxonomy/name/${encodeURIComponent(
     query,
   )}?content-type=application/json`;
-  const res = await fetchImpl(url, CACHE_INIT);
-  if (!res.ok) return [];
+  const res = await fetchImpl(url);
+  if (res.status === 400 || res.status === 404) return [];
+  if (res.status === 429) throw new Error('busy');
+  if (!res.ok) throw new Error('upstream');
   const json: unknown = await res.json();
   const arr = Array.isArray(json) ? (json as RawTaxon[]) : [];
   return arr.slice(0, 12).map((e) => {

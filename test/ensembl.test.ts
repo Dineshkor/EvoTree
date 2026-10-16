@@ -5,6 +5,7 @@ import {
   fillMissingMya,
   fetchLineage,
   fetchSpecies,
+  lineageErrorStatus,
   type LineageRank,
 } from '../lib/ensembl';
 
@@ -118,5 +119,20 @@ describe('fetchSpecies', () => {
       throw new Error('should not fetch');
     }) as unknown as typeof fetch;
     expect(await fetchSpecies('', neverFetch)).toEqual([]);
+  });
+
+  it('treats 400/404 as empty but raises busy/upstream as errors', async () => {
+    expect(await fetchSpecies('x', fakeFetch(400, {}))).toEqual([]);
+    expect(await fetchSpecies('x', fakeFetch(404, {}))).toEqual([]);
+    await expect(fetchSpecies('x', fakeFetch(429, {}))).rejects.toThrow('busy');
+    await expect(fetchSpecies('x', fakeFetch(500, {}))).rejects.toThrow('upstream');
+  });
+});
+
+describe('lineageErrorStatus', () => {
+  it('maps sentinel errors to HTTP statuses', () => {
+    expect(lineageErrorStatus('not-found')).toBe(404);
+    expect(lineageErrorStatus('busy')).toBe(429);
+    expect(lineageErrorStatus('upstream')).toBe(502);
   });
 });

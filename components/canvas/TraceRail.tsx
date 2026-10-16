@@ -51,8 +51,8 @@ export function TraceRail({
   const originY = sy(timeToY(0));
 
   const line = [
-    { x: originX, y: originY },
     ...points.map((p) => ({ x: p.x, y: p.y })),
+    { x: originX, y: originY },
   ];
   const d = line.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
 

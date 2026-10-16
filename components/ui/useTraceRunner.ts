@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { usePhyloStore, type TraceOrigin } from '@/store/usePhyloStore';
 import type { SpeciesSuggestion } from '@/lib/ensembl';
 
@@ -14,19 +14,24 @@ export function useTraceRunner() {
   const startTrace = usePhyloStore((s) => s.startTrace);
   const setTraceData = usePhyloStore((s) => s.setTraceData);
   const setTraceError = usePhyloStore((s) => s.setTraceError);
+  const tokenRef = useRef(0);
 
   const run = useCallback(
     async (query: string, org: TraceOrigin) => {
+      const token = ++tokenRef.current;
       startTrace(org);
       try {
         const res = await fetch(`/api/lineage?${query}`);
+        if (token !== tokenRef.current) return;
         if (!res.ok) {
           setTraceError(messageFor(res.status, org.commonName));
           return;
         }
         const ranks = await res.json();
+        if (token !== tokenRef.current) return;
         setTraceData(Array.isArray(ranks) ? ranks : []);
       } catch {
+        if (token !== tokenRef.current) return;
         setTraceError('Could not reach Ensembl. Check your connection and try again.');
       }
     },

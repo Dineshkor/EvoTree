@@ -14,6 +14,7 @@ export function SpeciesSearch({ onSelect }: Props) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SpeciesSuggestion[]>([]);
   const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const traceLoading = usePhyloStore((s) => s.traceLoading);
@@ -29,14 +30,26 @@ export function SpeciesSearch({ onSelect }: Props) {
     const ctrl = new AbortController();
     const t = setTimeout(async () => {
       setSearching(true);
+      setSearchError(null);
       try {
         const res = await fetch(`/api/species/search?q=${encodeURIComponent(q)}`, {
           signal: ctrl.signal,
         });
+        if (!res.ok) {
+          setResults([]);
+          setSearchError(
+            res.status === 429
+              ? 'Ensembl is busy — try again in a moment.'
+              : 'Search is unavailable right now.',
+          );
+          return;
+        }
         const data = await res.json();
         setResults(Array.isArray(data) ? data : []);
       } catch {
-        /* aborted or failed */
+        if (!ctrl.signal.aborted) {
+          setSearchError('Search is unavailable right now.');
+        }
       } finally {
         setSearching(false);
       }
@@ -97,7 +110,8 @@ export function SpeciesSearch({ onSelect }: Props) {
                 <span className="phylo-search-item-name">{r.displayName}</span>
               </button>
             ))}
-            {!searching && query.trim() && results.length === 0 && (
+            {searchError && <p className="phylo-search-empty">{searchError}</p>}
+            {!searching && !searchError && query.trim() && results.length === 0 && (
               <p className="phylo-search-empty">No organism found for &ldquo;{query}&rdquo;.</p>
             )}
           </div>

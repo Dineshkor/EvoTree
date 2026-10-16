@@ -56,10 +56,10 @@ export function Tour() {
 
   useEffect(() => {
     if (!active) return;
-    const id = requestAnimationFrame(measure);
+    const id = setTimeout(measure, 0);
     window.addEventListener('resize', measure);
     return () => {
-      cancelAnimationFrame(id);
+      clearTimeout(id);
       window.removeEventListener('resize', measure);
     };
   }, [active, measure]);
