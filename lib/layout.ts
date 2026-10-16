@@ -11,6 +11,10 @@ export function timeToY(mya: number): number {
   return (SPINE_HEIGHT * Math.log1p(mya)) / LOG_MAX;
 }
 
+export function yToTime(y: number): number {
+  return Math.expm1((y / SPINE_HEIGHT) * LOG_MAX);
+}
+
 const LANES: Record<LineageId, number> = {
   trunk: 0,
   whales: 1,

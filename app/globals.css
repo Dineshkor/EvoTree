@@ -270,3 +270,26 @@ body {
   );
   pointer-events: none;
 }
+
+/* ---------- canvas shell ---------- */
+.phylo-loader {
+  width: 46px;
+  height: 46px;
+  border-radius: 9999px;
+  border: 3px solid rgba(120, 200, 255, 0.25);
+  border-top-color: #54d6ff;
+  animation: phylo-spin 0.9s linear infinite;
+}
+.phylo-flow {
+  background: transparent;
+}
+.react-flow__attribution {
+  background: transparent;
+  color: rgba(180, 200, 240, 0.4);
+}
+
+@keyframes phylo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

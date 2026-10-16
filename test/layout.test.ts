@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   timeToY,
+  yToTime,
   assignPositions,
   laneFor,
   SPINE_HEIGHT,
@@ -19,6 +20,12 @@ describe('layout', () => {
     expect(timeToY(0)).toBeLessThan(timeToY(50));
     expect(timeToY(50)).toBeLessThan(timeToY(375));
     expect(timeToY(375)).toBeLessThan(timeToY(4000));
+  });
+
+  it('inverts timeToY', () => {
+    for (const mya of [0, 50, 375, 4000]) {
+      expect(yToTime(timeToY(mya))).toBeCloseTo(mya, 5);
+    }
   });
 
   it('assigns an in-range position to every species', () => {
