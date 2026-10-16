@@ -8,6 +8,7 @@ import { CreatureDrawer } from './ui/CreatureDrawer';
 import { ProgressMeter } from './ui/ProgressMeter';
 import { SpeciesSearch } from './ui/SpeciesSearch';
 import { TracePanel } from './ui/TracePanel';
+import { Tour } from './ui/Tour';
 import { useTraceRunner } from './ui/useTraceRunner';
 
 export function PhyloApp() {
@@ -24,6 +25,7 @@ export function PhyloApp() {
       <CreatureDrawer />
       <div className="phylo-grain" aria-hidden="true" />
       <ColdOpen />
+      <Tour />
     </div>
   );
 }

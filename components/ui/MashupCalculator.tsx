@@ -42,6 +42,7 @@ export function MashupCalculator() {
         <button
           type="button"
           className="phylo-mashup-btn"
+          data-tour="mashup"
           data-active={open || !!pair}
           onClick={() => setOpen((o) => !o)}
         >

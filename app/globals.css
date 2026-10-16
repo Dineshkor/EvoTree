@@ -1230,3 +1230,110 @@ body {
   color: rgba(160, 240, 210, 0.6);
   margin-left: 2px;
 }
+
+/* ---------- guided tour ---------- */
+.phylo-help {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  padding: 8px 13px;
+  border-radius: 9999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #dbe8ff;
+  background: rgba(8, 14, 26, 0.72);
+  border: 1px solid rgba(150, 190, 255, 0.18);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.phylo-help:hover {
+  border-color: rgba(150, 210, 255, 0.4);
+}
+.phylo-tour {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+}
+.phylo-tour-spot {
+  position: absolute;
+  border-radius: 16px;
+  box-shadow: 0 0 0 9999px rgba(2, 4, 10, 0.78);
+  border: 1.5px solid rgba(140, 230, 255, 0.7);
+  pointer-events: none;
+  transition: left 0.25s ease, top 0.25s ease, width 0.25s ease, height 0.25s ease;
+}
+.phylo-tour-card {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(6, 10, 22, 0.96);
+  border: 1px solid rgba(140, 210, 255, 0.35);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+  pointer-events: auto;
+}
+.phylo-tour-step {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(140, 210, 255, 0.7);
+}
+.phylo-tour-card h3 {
+  margin: 4px 0 6px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #eaf6ff;
+}
+.phylo-tour-card p {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: rgba(210, 225, 255, 0.8);
+}
+.phylo-tour-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+.phylo-tour-nav {
+  display: flex;
+  gap: 8px;
+}
+.phylo-tour-skip {
+  font-size: 12.5px;
+  color: rgba(190, 210, 245, 0.6);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.phylo-tour-back {
+  padding: 9px 15px;
+  border-radius: 9999px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #dbe8ff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  cursor: pointer;
+}
+.phylo-tour-back:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.phylo-tour-next {
+  padding: 9px 18px;
+  border-radius: 9999px;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #04121c;
+  background: linear-gradient(180deg, #a6ecff, #45b8ff);
+  border: none;
+  cursor: pointer;
+}

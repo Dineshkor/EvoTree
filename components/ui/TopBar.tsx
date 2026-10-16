@@ -3,6 +3,7 @@
 import { Repeat } from 'lucide-react';
 import { LINEAGE_PILLS } from '@/lib/data/lineages';
 import { usePhyloStore } from '@/store/usePhyloStore';
+import { HelpButton } from './HelpButton';
 
 export function TopBar() {
   const activeLineage = usePhyloStore((s) => s.activeLineage);
@@ -14,7 +15,7 @@ export function TopBar() {
     <div className="phylo-topbar">
       <div className="phylo-topbar-inner">
         <span className="phylo-topbar-label">How are we related?</span>
-        <div className="phylo-chips">
+        <div className="phylo-chips" data-tour="pills">
           {LINEAGE_PILLS.map((p) => {
             const active = activeLineage === p.id;
             return (
@@ -41,6 +42,7 @@ export function TopBar() {
             <Repeat size={13} />
             Reverse Mode
           </button>
+          <HelpButton />
         </div>
       </div>
     </div>
