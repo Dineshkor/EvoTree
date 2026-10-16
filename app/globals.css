@@ -293,3 +293,66 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* ---------- cold open ---------- */
+.phylo-coldopen {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px;
+  text-align: center;
+  background: radial-gradient(
+      90% 70% at 50% 30%,
+      rgba(30, 120, 200, 0.28),
+      transparent 70%
+    ),
+    linear-gradient(180deg, #01030a, #03060f 60%, #02040a);
+}
+.phylo-coldopen-kicker {
+  font-size: 11px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(140, 210, 255, 0.75);
+}
+.phylo-coldopen-title {
+  display: flex;
+  gap: 2px;
+  font-size: clamp(56px, 18vw, 132px);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  background: linear-gradient(180deg, #eaf6ff, #6fbcff 55%, #2a7bd6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 60px rgba(80, 180, 255, 0.35);
+}
+.phylo-coldopen-sub {
+  font-size: clamp(15px, 4.5vw, 22px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #d6ecff;
+}
+.phylo-coldopen-tag {
+  max-width: 30ch;
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(200, 220, 255, 0.66);
+}
+.phylo-coldopen-btn {
+  margin-top: 14px;
+  padding: 13px 26px;
+  border-radius: 9999px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #041018;
+  background: linear-gradient(180deg, #8fe6ff, #34b6ff);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 10px 34px rgba(50, 170, 255, 0.45);
+  cursor: pointer;
+}
