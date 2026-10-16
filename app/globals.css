@@ -914,3 +914,94 @@ body {
     opacity: 0.52;
   }
 }
+
+/* ---------- Ensembl trace rail ---------- */
+.phylo-trace {
+  position: absolute;
+  inset: 0;
+  z-index: 19;
+  overflow: hidden;
+  pointer-events: none;
+}
+.phylo-trace-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.phylo-trace-rail {
+  fill: none;
+  stroke: #7dfcd0;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 8px #35e6a8);
+  animation: phylo-trace-dash 1.2s linear infinite;
+  stroke-dasharray: 16 10;
+}
+@keyframes phylo-trace-dash {
+  to {
+    stroke-dashoffset: -26;
+  }
+}
+.phylo-trace-link {
+  fill: none;
+  stroke: rgba(125, 252, 208, 0.45);
+  stroke-width: 2;
+  stroke-dasharray: 4 6;
+}
+.phylo-trace-chip {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 3px 9px;
+  border-radius: 9px;
+  background: rgba(4, 12, 12, 0.88);
+  border: 1px solid rgba(125, 252, 208, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.55);
+  white-space: nowrap;
+}
+.phylo-trace-chip[data-anchored="true"] {
+  border-color: rgba(255, 200, 120, 0.6);
+}
+.phylo-trace-chip-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #d6fff0;
+  text-transform: capitalize;
+}
+.phylo-trace-chip-mya {
+  font-size: 8.5px;
+  color: rgba(160, 240, 210, 0.72);
+}
+.phylo-trace-origin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #04140f;
+  background: linear-gradient(180deg, #a6ffd9, #3fe0a0);
+  box-shadow: 0 6px 24px rgba(50, 220, 160, 0.55);
+}
+.phylo-trace-origin-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #04140f;
+}
+.phylo-trace-beyond {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 9px;
+  color: rgba(140, 220, 200, 0.6);
+  white-space: nowrap;
+}

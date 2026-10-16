@@ -7,7 +7,12 @@ import type { CreatureFlowNode } from './types';
 export function CreatureNode({ data }: NodeProps<CreatureFlowNode>) {
   const { species, state } = data;
   return (
-    <div className="phylo-node" data-state={state} data-rarity={species.rarity}>
+    <div
+      className="phylo-node"
+      data-state={state}
+      data-rarity={species.rarity}
+      data-tour="creature"
+    >
       <Handle type="target" position={Position.Bottom} className="phylo-handle" />
       <div className="phylo-medallion">
         <div className="phylo-orb">

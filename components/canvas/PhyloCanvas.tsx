@@ -32,6 +32,7 @@ import { ExtinctionBarrier } from './ExtinctionBarrier';
 import { LineageEdge } from './LineageEdge';
 import { EraBackdrop } from '@/components/ui/EraBackdrop';
 import { MashupBeams } from './MashupBeams';
+import { TraceRail } from './TraceRail';
 
 const nodeTypes: NodeTypes = {
   creature: CreatureNode,
@@ -205,7 +206,7 @@ function CanvasInner() {
   const onPaneClick = useCallback(() => select(null), [select]);
 
   return (
-    <div className="relative h-full w-full">
+    <div className="relative h-full w-full" data-tour="canvas">
       <EraBackdrop era={era} />
       <ReactFlow
         nodes={nodes}
@@ -234,6 +235,7 @@ function CanvasInner() {
         <LineageStoryController positions={positions} />
       </ReactFlow>
       <MashupBeams positions={positions} />
+      <TraceRail positions={positions} />
     </div>
   );
 }
