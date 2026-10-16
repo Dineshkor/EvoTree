@@ -14,6 +14,8 @@ import {
 } from '@xyflow/react';
 
 import { SPECIES, EXTINCTIONS } from '@/lib/data/species';
+import { LINEAGE_PILLS } from '@/lib/data/lineages';
+import { lineagePath } from '@/lib/ancestors';
 import { assignPositions, timeToY, yToTime } from '@/lib/layout';
 import { eraForTime } from '@/lib/era';
 import { dimmedIds, neighborIds } from '@/lib/selectors';
@@ -78,6 +80,33 @@ function FocusController({
     if (!p) return;
     setCenter(p.x, p.y, { zoom: 1, duration: 700 });
   }, [selectedId, positions, setCenter]);
+  return null;
+}
+
+function LineageStoryController({
+  positions,
+}: {
+  positions: Record<string, { x: number; y: number }>;
+}) {
+  const activeLineage = usePhyloStore((s) => s.activeLineage);
+  const reverse = usePhyloStore((s) => s.reverse);
+  const { setCenter } = useReactFlow();
+
+  useEffect(() => {
+    if (!activeLineage) return;
+    const pill = LINEAGE_PILLS.find((p) => p.id === activeLineage);
+    if (!pill) return;
+    const path = lineagePath(pill.terminal);
+    const seq = reverse ? [...path].reverse() : path;
+    const timers = seq.map((id, i) =>
+      setTimeout(() => {
+        const p = positions[id];
+        if (p) setCenter(p.x, p.y, { zoom: 0.9, duration: 650 });
+      }, i * 680),
+    );
+    return () => timers.forEach(clearTimeout);
+  }, [activeLineage, reverse, positions, setCenter]);
+
   return null;
 }
 
@@ -200,6 +229,7 @@ function CanvasInner() {
         />
         <EraTracker onTime={setMya} />
         <FocusController positions={positions} selectedId={selectedId} />
+        <LineageStoryController positions={positions} />
       </ReactFlow>
     </div>
   );
