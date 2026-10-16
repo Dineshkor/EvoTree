@@ -3,6 +3,8 @@ import {
   pickLabel,
   normalizeClassification,
   fillMissingMya,
+  fetchLineage,
+  fetchSpecies,
   type LineageRank,
 } from '../lib/ensembl';
 
@@ -73,5 +75,48 @@ describe('fillMissingMya', () => {
     const filled = fillMissingMya(ranks);
     for (const r of filled) expect(r.mya).not.toBeNull();
     expect(filled[0].mya!).toBeGreaterThan(filled[filled.length - 1].mya!);
+  });
+});
+
+function fakeFetch(status: number, body: unknown): typeof fetch {
+  return (async () =>
+    ({ ok: status >= 200 && status < 300, status, json: async () => body }) as Response) as typeof fetch;
+}
+
+describe('fetchLineage', () => {
+  it('normalizes a successful response', async () => {
+    const ranks = await fetchLineage('Felis_catus', fakeFetch(200, CAT_FIXTURE));
+    expect(ranks[0].id).toBe('luca');
+    expect(ranks.some((r) => r.name === 'Mammalia')).toBe(true);
+  });
+
+  it('maps 404 and 429 to distinct errors', async () => {
+    await expect(fetchLineage('nope', fakeFetch(404, {}))).rejects.toThrow('not-found');
+    await expect(fetchLineage('nope', fakeFetch(429, {}))).rejects.toThrow('busy');
+  });
+});
+
+describe('fetchSpecies', () => {
+  const TAXA = [
+    {
+      id: '9685',
+      name: 'Felis catus',
+      scientific_name: 'Felis catus',
+      tags: { common_name: ['cat', 'cats'] },
+    },
+  ];
+
+  it('maps taxa to suggestions', async () => {
+    const out = await fetchSpecies('cat', fakeFetch(200, TAXA));
+    expect(out).toEqual([
+      { id: '9685', name: 'Felis catus', commonName: 'cat', displayName: 'Felis catus' },
+    ]);
+  });
+
+  it('returns nothing for a blank query without calling the network', async () => {
+    const neverFetch = (() => {
+      throw new Error('should not fetch');
+    }) as unknown as typeof fetch;
+    expect(await fetchSpecies('', neverFetch)).toEqual([]);
   });
 });

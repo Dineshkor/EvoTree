@@ -33,6 +33,11 @@ const LABEL_KEYS = [
   'blast_name',
 ];
 
+const KNOWN_MYA: Record<string, number> = {
+  Eukaryota: 1900,
+  'cellular organisms': 3500,
+};
+
 export function pickLabel(
   tags: Record<string, unknown> | undefined,
   fallback: string,
@@ -56,7 +61,8 @@ function toRank(entry: RawTaxon): LineageRank {
   const name = entry.scientific_name ?? entry.name ?? 'Unknown';
   const tags = entry.tags ?? {};
   const myaRaw = first(tags.ensembl_timetree_mya);
-  const mya = myaRaw ? Number.parseFloat(myaRaw) : null;
+  const parsed = myaRaw ? Number.parseFloat(myaRaw) : null;
+  const mya = parsed !== null && Number.isFinite(parsed) ? parsed : KNOWN_MYA[name] ?? null;
   return {
     id: String(entry.id ?? name),
     name,
@@ -121,4 +127,56 @@ export function normalizeClassification(raw: unknown): LineageRank[] {
 
   const filled = fillMissingMya(withLuca);
   return filled.sort((a, b) => (b.mya ?? 0) - (a.mya ?? 0));
+}
+
+export interface SpeciesSuggestion {
+  id: string;
+  name: string;
+  commonName: string;
+  displayName: string;
+}
+
+type FetchInit = RequestInit & { next?: { revalidate: number } };
+const CACHE_INIT: FetchInit = { next: { revalidate: 86400 } };
+
+const ENSEMBL = 'https://rest.ensembl.org';
+
+export async function fetchLineage(
+  name: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<LineageRank[]> {
+  const url = `${ENSEMBL}/taxonomy/classification/${encodeURIComponent(
+    name,
+  )}?content-type=application/json`;
+  const res = await fetchImpl(url, CACHE_INIT);
+  if (res.status === 404) throw new Error('not-found');
+  if (res.status === 429) throw new Error('busy');
+  if (!res.ok) throw new Error('upstream');
+  const ranks = normalizeClassification(await res.json());
+  if (ranks.length === 0) throw new Error('not-found');
+  return ranks;
+}
+
+export async function fetchSpecies(
+  q: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<SpeciesSuggestion[]> {
+  const query = q.trim();
+  if (!query) return [];
+  const url = `${ENSEMBL}/taxonomy/name/${encodeURIComponent(
+    query,
+  )}?content-type=application/json`;
+  const res = await fetchImpl(url, CACHE_INIT);
+  if (!res.ok) return [];
+  const json: unknown = await res.json();
+  const arr = Array.isArray(json) ? (json as RawTaxon[]) : [];
+  return arr.slice(0, 12).map((e) => {
+    const name = e.scientific_name ?? e.name ?? '';
+    return {
+      id: String(e.id ?? name),
+      name,
+      commonName: pickLabel(e.tags, name),
+      displayName: name.replace(/_/g, ' '),
+    };
+  });
 }
